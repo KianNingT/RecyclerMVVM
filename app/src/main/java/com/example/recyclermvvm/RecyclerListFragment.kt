@@ -26,26 +26,26 @@ import com.example.recyclermvvm.viewmodel.MainActivityViewModel
 class RecyclerListFragment : Fragment() {
 
     private lateinit var recyclerViewAdapter: RecyclerViewAdapter
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_recycler_list, container, false)
-
-        initRecyclerView(view)
+        recyclerView = view.findViewById(R.id.recycler_view)
+        initRecyclerView()
         initViewModel()
 
         return view
     }
 
-    private fun initRecyclerView(view: View) {
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
+    private fun initRecyclerView() {
+
         recyclerView.layoutManager = LinearLayoutManager(activity)
         //adding horizontal lines between items
         val decoration = DividerItemDecoration(activity, DividerItemDecoration.VERTICAL)
         recyclerView.addItemDecoration(decoration)
-        recyclerViewAdapter = RecyclerViewAdapter()
-        recyclerView.adapter = recyclerViewAdapter
+
 
     }
 
@@ -53,7 +53,10 @@ class RecyclerListFragment : Fragment() {
         val viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
         viewModel.recyclerListLiveData.observe(viewLifecycleOwner, Observer<RecyclerList> {
             if (it != null) {
-                recyclerViewAdapter.setUpdatedData(it.items)
+                recyclerViewAdapter = RecyclerViewAdapter(it.items)
+                recyclerView.adapter = recyclerViewAdapter
+               // recyclerViewAdapter.setUpdatedData(it.items)
+
             } else{
                 Toast.makeText(activity, "Error in getting data", Toast.LENGTH_SHORT).show()
             }

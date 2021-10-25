@@ -13,29 +13,32 @@ import com.squareup.picasso.Picasso
 import kotlinx.coroutines.NonDisposableHandle
 import kotlinx.coroutines.NonDisposableHandle.parent
 
-class RecyclerViewAdapter: RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>() {
+class RecyclerViewAdapter(
+    var repos : ArrayList<RecyclerData>
+): RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>() {
 
-    var items = ArrayList<RecyclerData>()
-
-    fun setUpdatedData(items: ArrayList<RecyclerData>) {
-        this.items = items;
-        notifyDataSetChanged()
-    }
+//    fun setUpdatedData(items: ArrayList<RecyclerData>) {
+//        this.items = items;
+//        notifyDataSetChanged()
+//    }
 
 
+//    inner class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+//        val recyclerImage: ImageView = view.
+//    }
     class MyViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
-        private val recyclerImage: ImageView = view.findViewById(R.id.recycler_image)
-        private val tvTitle: TextView = view.findViewById(R.id.tv_name)
-        private val tvDesc: TextView = view.findViewById(R.id.description)
+         val recyclerImage: ImageView = view.findViewById(R.id.recycler_image)
+         val tvTitle: TextView = view.findViewById(R.id.tv_name)
+         val tvDesc: TextView = view.findViewById(R.id.description)
 
-        fun bind(data : RecyclerData) {
-            tvTitle.text = data.name
-            tvDesc.text = data.description
-
-            val url = data.owner.avatar_url
-            Picasso.get().load(url).into(recyclerImage)
-        }
+//        fun bind(data : RecyclerData) {
+//            tvTitle.text = data.name
+//            tvDesc.text = data.description
+//
+//            val url = data.owner.avatar_url
+//            Picasso.get().load(url).into(recyclerImage)
+//        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -45,10 +48,17 @@ class RecyclerViewAdapter: RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bind(items[position])
+      //  holder.bind(items[position])
+        val currentRepo = repos[position]
+
+        holder.tvTitle.text = currentRepo.name
+        holder.tvDesc.text = currentRepo.description
+        val url = currentRepo.owner.avatar_url
+        Picasso.get().load(url).into(holder.recyclerImage)
+
     }
 
     override fun getItemCount(): Int {
-        return items.size
+        return repos.size
     }
 }
